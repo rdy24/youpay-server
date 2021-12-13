@@ -14,7 +14,7 @@
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="/">Product</a></li>
-            <li class="breadcrumb-item active">Tambah</li>
+            <li class="breadcrumb-item active">Edit</li>
           </ol>
         </div>
       </div>
@@ -29,12 +29,12 @@
         <div class="col-12">
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title">Tambah Data</h3>
+              <h3 class="card-title">Edit Data</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
             <form
-              action="/product/create"
+              action="/product/edit/<%= product._id %>?_method=PUT"
               method="post"
               enctype="multipart/form-data"
             >
@@ -47,6 +47,7 @@
                     class="form-control"
                     id="judul"
                     placeholder="Masukan nama product"
+                    value="<%= product.judul %>"
                     required
                   />
                 </div>
@@ -57,11 +58,15 @@
                     name="icon"
                     class="file-input form-control"
                     id="icon"
-                    required
                   />
                 </div>
                 <br />
-                <img src="" id="perview" />
+                <img
+                  src="http://localhost:4000/uploads/<%= product.icon %>"
+                  width="10%"
+                  height="10%"
+                  id="perview"
+                />
               </div>
               <!-- /.card-body -->
 
