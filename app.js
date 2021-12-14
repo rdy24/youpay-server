@@ -7,8 +7,9 @@ const methodOverride = require("method-override");
 const session = require("express-session");
 const flash = require("connect-flash");
 
-var dashboardRouter = require("./app/dashboard/router");
-var productRouter = require("./app/product/router");
+const dashboardRouter = require("./app/dashboard/router");
+const productRouter = require("./app/product/router");
+const detailRouter = require("./app/detail/router");
 
 var app = express();
 
@@ -39,6 +40,7 @@ app.use("/trix", express.static(path.join(__dirname, "/node_modules/trix/")));
 
 app.use("/", dashboardRouter);
 app.use("/product", productRouter);
+app.use("/detail", detailRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

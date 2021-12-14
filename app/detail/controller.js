@@ -1,4 +1,5 @@
-const Product = require("./model");
+const Product = require("../product/model");
+const Detail = require("./model");
 const path = require("path");
 const fs = require("fs");
 const config = require("../../config");
@@ -10,29 +11,34 @@ module.exports = {
       const alertStatus = req.flash("alertStatus");
 
       const alert = { message: alertMessage, status: alertStatus };
-      const product = await Product.find();
-      res.render("admin/product/view_product", {
-        product,
+      const detail = await Detail.find().populate("product");
+
+      res.render("admin/detail/view_detail", {
+        detail,
         alert,
       });
     } catch (err) {
+      console.log(err);
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/detail");
     }
   },
   viewCreate: async (req, res) => {
     try {
-      res.render("admin/product/create");
+      const product = await Product.find();
+      res.render("admin/detail/create", {
+        product,
+      });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/detail");
     }
   },
   actionCreate: async (req, res) => {
     try {
-      const { judul, icon } = req.body;
+      const { product, item, description } = req.body;
 
       let tmp_path = req.file.path;
       let originaExt =
@@ -52,44 +58,48 @@ module.exports = {
 
       src.on("end", async () => {
         try {
-          const product = new Product({
-            judul,
-            icon: filename,
+          const detail = new Detail({
+            product,
+            item,
+            description,
+            backdrop: filename,
           });
 
-          await product.save();
+          await detail.save();
           req.flash("alertMessage", "Berhasil Menambah Data");
           req.flash("alertStatus", "success");
-          res.redirect("/product");
+          res.redirect("/detail");
         } catch (err) {
           req.flash("alertMessage", `${err.message}`);
           req.flash("alertStatus", "danger");
-          res.redirect("/product");
+          res.redirect("/detail");
         }
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/detail");
     }
   },
   viewEdit: async (req, res) => {
     try {
       const { id } = req.params;
-      const product = await Product.findOne({ _id: id });
-      res.render("admin/product/edit", {
+      const product = await Product.find();
+      const detail = await Detail.findOne({ _id: id }).populate("product");
+      res.render("admin/detail/edit", {
+        detail,
         product,
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/detail");
     }
   },
   actionEdit: async (req, res) => {
     try {
       const { id } = req.params;
-      const { judul, icon } = req.body;
+      const { product, item, description } = req.body;
 
       if (req.file) {
         let tmp_path = req.file.path;
@@ -110,69 +120,72 @@ module.exports = {
 
         src.on("end", async () => {
           try {
-            const product = await Product.findOne({ _id: id });
+            const detail = await Detail.findOne({ _id: id });
 
-            let currentImage = `${config.rootPath}/public/uploads/${product.icon}`;
+            let currentImage = `${config.rootPath}/public/uploads/${detail.backdrop}`;
             if (fs.existsSync(currentImage)) {
               fs.unlinkSync(currentImage);
             }
 
-            await Product.findOneAndUpdate(
+            await Detail.findOneAndUpdate(
               {
                 _id: id,
               },
               {
-                judul,
-                icon: filename,
+                product,
+                item,
+                description,
+                backdrop: filename,
               }
             );
             req.flash("alertMessage", "Berhasil Ubah Data");
             req.flash("alertStatus", "success");
-            res.redirect("/product");
+            res.redirect("/detail");
           } catch (err) {
             req.flash("alertMessage", `${err.message}`);
             req.flash("alertStatus", "danger");
-            res.redirect("/product");
+            res.redirect("/detail");
           }
         });
       } else {
-        await Product.findOneAndUpdate(
+        await Detail.findOneAndUpdate(
           {
             _id: id,
           },
           {
-            judul,
+            product,
+            item,
+            description,
           }
         );
         req.flash("alertMessage", "Berhasil Ubah Data");
         req.flash("alertStatus", "success");
-        res.redirect("/product");
+        res.redirect("/detail");
       }
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/detail");
     }
   },
   actionDelete: async (req, res) => {
     try {
       const { id } = req.params;
 
-      await Product.findOneAndRemove({
+      const detail = await Detail.findOneAndRemove({
         _id: id,
       });
-      let currentImage = `${config.rootPath}/public/uploads/${product.icon}`;
+      let currentImage = `${config.rootPath}/public/uploads/${detail.backdrop}`;
       if (fs.existsSync(currentImage)) {
         fs.unlinkSync(currentImage);
       }
-
       req.flash("alertMessage", "Berhasil Hapus Data");
       req.flash("alertStatus", "success");
-      res.redirect("/product");
+      res.redirect("/detail");
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/detail");
     }
   },
 };

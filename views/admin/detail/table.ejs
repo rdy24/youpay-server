@@ -1,0 +1,46 @@
+<table id="example2" class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>Judul</th>
+      <th>Item</th>
+      <th>Backdrop</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for(let i = 0; i < detail.length; i++){ %>
+    <tr>
+      <td><%= i + 1 %></td>
+      <td><%= detail[i].product.judul %></td>
+      <td><%= detail[i].item %></td>
+      <td>
+        <img
+          src="http://localhost:4000/uploads/<%= detail[i].backdrop %>"
+          width="40%"
+          height="40%"
+        />
+      </td>
+
+      <td>
+        <form
+          action="/detail/delete/<%= detail[i]._id %>?_method=DELETE"
+          method="post"
+        >
+          <a
+            href="/detail/edit/<%= detail[i]._id %>"
+            class="btn btn-info btn-sm"
+          >
+            <i class="fas fa-pencil-alt"></i>
+            Ubah
+          </a>
+          <button class="btn btn-danger btn-sm">
+            <i class="fas fa-trash"></i>
+            Hapus
+          </button>
+        </form>
+      </td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
