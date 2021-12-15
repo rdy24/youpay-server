@@ -34,55 +34,45 @@
             <!-- /.card-header -->
             <!-- form start -->
             <form
-              action="/detail/create"
+              action="/article/create"
               method="post"
               enctype="multipart/form-data"
             >
               <div class="card-body">
                 <div class="form-group">
-                  <label>Game</label>
-                  <select
-                    class="form-control select2"
-                    style="width: 100%"
-                    name="product"
-                    required
-                  >
-                    <option selected="selected">Pilih kategori</option>
-                    <% product.forEach(product=>{ %>
-                    <option value="<%= product._id %>">
-                      <%= product.game %>
-                    </option>
-                    <% }) %>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="item">Item Game</label>
+                  <label for="judul">Judul</label>
                   <input
                     type="text"
-                    name="item"
+                    name="judul"
                     class="form-control"
-                    id="item"
-                    placeholder="Masukan item game"
+                    id="judul"
+                    placeholder="Masukan judul artikel"
                     required
                   />
                 </div>
                 <div class="form-group">
-                  <label for="description">Deskripsi Produk</label>
+                  <label for="excrept">excrept</label>
                   <input
-                    id="description"
-                    type="hidden"
-                    name="description"
+                    type="text"
+                    name="excrept"
+                    class="form-control"
+                    id="excrept"
+                    placeholder="Masukan excrept game"
                     required
                   />
-                  <trix-editor input="description"></trix-editor>
+                </div>
+                <div class="form-group">
+                  <label for="body">Isi artikel</label>
+                  <input id="body" type="hidden" name="body" required />
+                  <trix-editor input="body"></trix-editor>
                 </div>
                 <div class="mb-3">
-                  <label for="backdrop">Gambar backdrop</label>
+                  <label for="image">Gambar</label>
                   <input
                     type="file"
-                    name="backdrop"
+                    name="image"
                     class="file-input form-control"
-                    id="backdrop"
+                    id="image"
                     required
                   />
                   <br />
@@ -125,7 +115,7 @@
     }
   }
 
-  $("#backdrop").change(function () {
+  $("#image").change(function () {
     readURL(this);
   });
 </script>

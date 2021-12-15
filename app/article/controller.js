@@ -1,4 +1,4 @@
-const Product = require("./model");
+const Article = require("./model");
 const path = require("path");
 const fs = require("fs");
 const config = require("../../config");
@@ -10,29 +10,32 @@ module.exports = {
       const alertStatus = req.flash("alertStatus");
 
       const alert = { message: alertMessage, status: alertStatus };
-      const product = await Product.find();
-      res.render("admin/product/view_product", {
-        product,
+
+      const article = await Article.find();
+
+      res.render("admin/article/view_article", {
+        article,
         alert,
       });
     } catch (err) {
+      console.log(err);
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/article");
     }
   },
   viewCreate: async (req, res) => {
     try {
-      res.render("admin/product/create");
+      res.render("admin/article/create");
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/detail");
     }
   },
   actionCreate: async (req, res) => {
     try {
-      const { game, icon } = req.body;
+      const { judul, body, excrept } = req.body;
 
       let tmp_path = req.file.path;
       let originaExt =
@@ -52,44 +55,46 @@ module.exports = {
 
       src.on("end", async () => {
         try {
-          const product = new Product({
-            game,
-            icon: filename,
+          const article = new Article({
+            judul,
+            body,
+            excrept,
+            image: filename,
           });
 
-          await product.save();
+          await article.save();
           req.flash("alertMessage", "Berhasil Menambah Data");
           req.flash("alertStatus", "success");
-          res.redirect("/product");
+          res.redirect("/article");
         } catch (err) {
           req.flash("alertMessage", `${err.message}`);
           req.flash("alertStatus", "danger");
-          res.redirect("/product");
+          res.redirect("/article");
         }
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/article");
     }
   },
   viewEdit: async (req, res) => {
     try {
       const { id } = req.params;
-      const product = await Product.findOne({ _id: id });
-      res.render("admin/product/edit", {
-        product,
+      const article = await Article.findOne({ _id: id });
+      res.render("admin/article/edit", {
+        article,
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/article");
     }
   },
   actionEdit: async (req, res) => {
     try {
       const { id } = req.params;
-      const { game, icon } = req.body;
+      const { judul, body, excrept } = req.body;
 
       if (req.file) {
         let tmp_path = req.file.path;
@@ -110,69 +115,72 @@ module.exports = {
 
         src.on("end", async () => {
           try {
-            const product = await Product.findOne({ _id: id });
+            const article = await Article.findOne({ _id: id });
 
-            let currentImage = `${config.rootPath}/public/uploads/${product.icon}`;
+            let currentImage = `${config.rootPath}/public/uploads/${article.image}`;
             if (fs.existsSync(currentImage)) {
               fs.unlinkSync(currentImage);
             }
 
-            await Product.findOneAndUpdate(
+            await Article.findOneAndUpdate(
               {
                 _id: id,
               },
               {
-                game,
-                icon: filename,
+                judul,
+                body,
+                excrept,
+                image: filename,
               }
             );
             req.flash("alertMessage", "Berhasil Ubah Data");
             req.flash("alertStatus", "success");
-            res.redirect("/product");
+            res.redirect("/article");
           } catch (err) {
             req.flash("alertMessage", `${err.message}`);
             req.flash("alertStatus", "danger");
-            res.redirect("/product");
+            res.redirect("/article");
           }
         });
       } else {
-        await Product.findOneAndUpdate(
+        await Article.findOneAndUpdate(
           {
             _id: id,
           },
           {
-            game,
+            judul,
+            body,
+            excrept,
           }
         );
         req.flash("alertMessage", "Berhasil Ubah Data");
         req.flash("alertStatus", "success");
-        res.redirect("/product");
+        res.redirect("/article");
       }
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/article");
     }
   },
   actionDelete: async (req, res) => {
     try {
       const { id } = req.params;
 
-      await Product.findOneAndRemove({
+      const article = await Article.findOneAndRemove({
         _id: id,
       });
-      let currentImage = `${config.rootPath}/public/uploads/${product.icon}`;
+      let currentImage = `${config.rootPath}/public/uploads/${article.image}`;
       if (fs.existsSync(currentImage)) {
         fs.unlinkSync(currentImage);
       }
-
       req.flash("alertMessage", "Berhasil Hapus Data");
       req.flash("alertStatus", "success");
-      res.redirect("/product");
+      res.redirect("/article");
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/product");
+      res.redirect("/article");
     }
   },
 };

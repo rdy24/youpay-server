@@ -8,12 +8,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Detail Product</h1>
+          <h1>Article</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item"><a href="/">Detail</a></li>
+            <li class="breadcrumb-item"><a href="/article">Article</a></li>
             <li class="breadcrumb-item active">Tambah</li>
           </ol>
         </div>
@@ -29,64 +29,64 @@
         <div class="col-12">
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title">Tambah Data</h3>
+              <h3 class="card-title">Edit Data</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
             <form
-              action="/detail/create"
+              action="/article/edit/<%= article._id %>?_method=PUT"
               method="post"
               enctype="multipart/form-data"
             >
               <div class="card-body">
                 <div class="form-group">
-                  <label>Game</label>
-                  <select
-                    class="form-control select2"
-                    style="width: 100%"
-                    name="product"
-                    required
-                  >
-                    <option selected="selected">Pilih kategori</option>
-                    <% product.forEach(product=>{ %>
-                    <option value="<%= product._id %>">
-                      <%= product.game %>
-                    </option>
-                    <% }) %>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="item">Item Game</label>
+                  <label for="judul">Judul</label>
                   <input
                     type="text"
-                    name="item"
+                    name="judul"
                     class="form-control"
-                    id="item"
-                    placeholder="Masukan item game"
+                    id="judul"
+                    placeholder="Masukan judul artikel"
+                    value="<%= article.judul %>"
                     required
                   />
                 </div>
                 <div class="form-group">
-                  <label for="description">Deskripsi Produk</label>
+                  <label for="excrept">excrept</label>
                   <input
-                    id="description"
-                    type="hidden"
-                    name="description"
+                    type="text"
+                    name="excrept"
+                    class="form-control"
+                    id="excrept"
+                    placeholder="Masukan excrept"
                     required
+                    value="<%- article.excrept %>"
                   />
-                  <trix-editor input="description"></trix-editor>
+                </div>
+                <div class="form-group">
+                  <label for="body">Isi artikel</label>
+                  <input
+                    id="body"
+                    type="hidden"
+                    name="body"
+                    required
+                    value="<%- article.body %>"
+                  />
+                  <trix-editor input="body"></trix-editor>
                 </div>
                 <div class="mb-3">
-                  <label for="backdrop">Gambar backdrop</label>
+                  <label for="image">Gambar</label>
                   <input
                     type="file"
-                    name="backdrop"
+                    name="image"
                     class="file-input form-control"
-                    id="backdrop"
-                    required
+                    id="image"
                   />
                   <br />
-                  <img src="" id="perview" />
+                  <img
+                    src="http://localhost:4000/uploads/<%= article.image %>"
+                    id="perview"
+                  />
                 </div>
               </div>
               <!-- /.card-body -->
@@ -125,7 +125,7 @@
     }
   }
 
-  $("#backdrop").change(function () {
+  $("#image").change(function () {
     readURL(this);
   });
 </script>

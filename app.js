@@ -10,6 +10,7 @@ const flash = require("connect-flash");
 const dashboardRouter = require("./app/dashboard/router");
 const productRouter = require("./app/product/router");
 const detailRouter = require("./app/detail/router");
+const articleRouter = require("./app/article/router");
 
 var app = express();
 
@@ -41,6 +42,7 @@ app.use("/trix", express.static(path.join(__dirname, "/node_modules/trix/")));
 app.use("/", dashboardRouter);
 app.use("/product", productRouter);
 app.use("/detail", detailRouter);
+app.use("/article", articleRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

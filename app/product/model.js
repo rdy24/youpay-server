@@ -1,12 +1,15 @@
 const mongoose = require("mongoose");
-let productSchema = mongoose.Schema({
-  judul: {
-    type: String,
-    require: [true, "Judul Harus diisi"],
+let productSchema = mongoose.Schema(
+  {
+    game: {
+      type: String,
+      require: [true, "Nama Game Harus diisi"],
+    },
+    icon: {
+      type: String,
+    },
   },
-  icon: {
-    type: String,
-  },
-});
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Product", productSchema);

@@ -2,32 +2,32 @@
   <thead>
     <tr>
       <th>No.</th>
-      <th>Game</th>
-      <th>Item</th>
-      <th>Backdrop</th>
+      <th>Judul</th>
+      <th>Gambar</th>
+      <th>Excrept</th>
       <th>Aksi</th>
     </tr>
   </thead>
   <tbody>
-    <% for(let i = 0; i < detail.length; i++){ %>
+    <% for(let i = 0; i < article.length; i++){ %>
     <tr>
       <td><%= i + 1 %></td>
-      <td><%= detail[i].product.game %></td>
-      <td><%= detail[i].item %></td>
+      <td><%= article[i].judul %></td>
       <td>
         <img
-          src="http://localhost:4000/uploads/<%= detail[i].backdrop %>"
+          src="http://localhost:4000/uploads/<%= article[i].image %>"
           width="200px"
         />
       </td>
+      <td><%- article[i].excrept %></td>
 
       <td>
         <form
-          action="/detail/delete/<%= detail[i]._id %>?_method=DELETE"
+          action="/article/delete/<%= article[i]._id %>?_method=DELETE"
           method="post"
         >
           <a
-            href="/detail/edit/<%= detail[i]._id %>"
+            href="/article/edit/<%= article[i]._id %>"
             class="btn btn-info btn-sm"
           >
             <i class="fas fa-pencil-alt"></i>
