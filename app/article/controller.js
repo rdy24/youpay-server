@@ -16,6 +16,8 @@ module.exports = {
       res.render("admin/article/view_article", {
         article,
         alert,
+        name: req.session.user.name,
+        title: "Youpay Admin | Article",
       });
     } catch (err) {
       console.log(err);
@@ -26,7 +28,10 @@ module.exports = {
   },
   viewCreate: async (req, res) => {
     try {
-      res.render("admin/article/create");
+      res.render("admin/article/create", {
+        name: req.session.user.name,
+        title: "Youpay Admin | Tambah Article",
+      });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
@@ -84,6 +89,8 @@ module.exports = {
       const article = await Article.findOne({ _id: id });
       res.render("admin/article/edit", {
         article,
+        name: req.session.user.name,
+        title: "Youpay Admin | Ubah Article",
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);

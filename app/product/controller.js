@@ -14,6 +14,8 @@ module.exports = {
       res.render("admin/product/view_product", {
         product,
         alert,
+        name: req.session.user.name,
+        title: "Youpay Admin | Product",
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
@@ -23,7 +25,10 @@ module.exports = {
   },
   viewCreate: async (req, res) => {
     try {
-      res.render("admin/product/create");
+      res.render("admin/product/create", {
+        name: req.session.user.name,
+        title: "Youpay Admin | Tambah Product",
+      });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
@@ -79,6 +84,8 @@ module.exports = {
       const product = await Product.findOne({ _id: id });
       res.render("admin/product/edit", {
         product,
+        name: req.session.user.name,
+        title: "Youpay Admin | Ubah Product",
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);

@@ -16,6 +16,8 @@ module.exports = {
       res.render("admin/detail/view_detail", {
         detail,
         alert,
+        name: req.session.user.name,
+        title: "Youpay Admin | Detail Product",
       });
     } catch (err) {
       console.log(err);
@@ -29,6 +31,8 @@ module.exports = {
       const product = await Product.find();
       res.render("admin/detail/create", {
         product,
+        name: req.session.user.name,
+        title: "Youpay Admin | Tambah Detail",
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
@@ -89,6 +93,8 @@ module.exports = {
       res.render("admin/detail/edit", {
         detail,
         product,
+        name: req.session.user.name,
+        title: "Youpay Admin | Ubah Detail",
       });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);

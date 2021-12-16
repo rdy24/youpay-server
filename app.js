@@ -7,10 +7,11 @@ const methodOverride = require("method-override");
 const session = require("express-session");
 const flash = require("connect-flash");
 
+const usersRouter = require("./app/users/router");
+const articleRouter = require("./app/article/router");
 const dashboardRouter = require("./app/dashboard/router");
 const productRouter = require("./app/product/router");
 const detailRouter = require("./app/detail/router");
-const articleRouter = require("./app/article/router");
 
 var app = express();
 
@@ -39,7 +40,8 @@ app.use(
 );
 app.use("/trix", express.static(path.join(__dirname, "/node_modules/trix/")));
 
-app.use("/", dashboardRouter);
+app.use("/", usersRouter);
+app.use("/dashboard", dashboardRouter);
 app.use("/product", productRouter);
 app.use("/detail", detailRouter);
 app.use("/article", articleRouter);
