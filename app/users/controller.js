@@ -1,4 +1,5 @@
 const User = require("./model");
+const Player = require("../player/model");
 const bcrypt = require("bcryptjs");
 
 module.exports = {
@@ -28,7 +29,7 @@ module.exports = {
       const { email, password } = req.body;
       const check = await User.findOne({ email: email });
       if (check) {
-        if (check.status === "Y") {
+        if (check.status === "Y" && check.role === "admin") {
           const checkPassword = await bcrypt.compare(password, check.password);
           if (checkPassword) {
             req.session.user = {
@@ -49,14 +50,16 @@ module.exports = {
           res.redirect("/");
         }
       } else {
-        req.flash("alertMessage", `Email yang anda inputkan salah`);
+        req.flash("alertMessage", `Anda Belum Terdaftar`);
         req.flash("alertStatus", "danger");
         res.redirect("/");
+        console.log(email);
       }
     } catch (err) {
       req.flash("alertMessage", `Email yang anda masukan Salah`);
       req.flash("alertStatus", "danger");
       res.redirect("/");
+      console.log(err);
     }
   },
   actionLogout: (req, res) => {

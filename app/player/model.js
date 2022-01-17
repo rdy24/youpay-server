@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const HASH_ROUND = 10;
 
-let userSchema = mongoose.Schema(
+let playerSchema = mongoose.Schema(
   {
     email: {
       type: String,
@@ -37,10 +37,10 @@ let userSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.path("email").validate(
+playerSchema.path("email").validate(
   async function (value) {
     try {
-      const count = await this.model("User").countDocuments({ email: value });
+      const count = await this.model("Player").countDocuments({ email: value });
       return !count;
     } catch (err) {
       throw err;
@@ -49,9 +49,9 @@ userSchema.path("email").validate(
   (attr) => `${attr.value} sudah terdaftar`
 );
 
-userSchema.pre("save", function (next) {
+playerSchema.pre("save", function (next) {
   this.password = bcrypt.hashSync(this.password, HASH_ROUND);
   next();
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Player", playerSchema);

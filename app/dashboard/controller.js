@@ -1,9 +1,17 @@
+const Product = require("../product/model");
+const Article = require("../article/model");
 module.exports = {
   index: async (req, res) => {
     try {
-      res.render("index", {
+      const product = await Product.countDocuments();
+      const article = await Article.countDocuments();
+      res.render("admin/dashboard/view_dashboard", {
         name: req.session.user.name,
         title: "Youpay Admin | Dashboard",
+        count: {
+          product,
+          article,
+        },
       });
     } catch (err) {
       console.log(err);
